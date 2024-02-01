@@ -2,13 +2,19 @@
 
 # Use this for development purposes only #
 # Its so boring to call GO interpreter everytime # 
+#
+# Call bash hotreload.sh and try to change the main.go file to see
+# how this works
 
 ROOTDIR=$(dirname "$0")
 
 # Add your Golang entrypoint file path here #
 ENTRYPOINT="${ROOTDIR}/main.go"
 GIT='git --git-dir='$PWD'/.git'
-GOCOMPILER='which go'
+
+# If your Golang compiler binary is stored somewhere else
+# change this path
+GOCOMPILER='/usr/local/go/bin/go'
 
 LAST_CHANGES_SIZE=0
 while true
@@ -25,6 +31,6 @@ do
     if (($CHANGES_OUTPUT_LENGTH > 0));
     then
         echo "Recompiled!"
-        $($GOCOMPILER run $ENTRYPOINT_SERVER) &
+        $($GOCOMPILER run $ENTRYPOINT) &
     fi
 done
