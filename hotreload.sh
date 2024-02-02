@@ -16,20 +16,26 @@ GIT='git --git-dir='$PWD'/.git'
 # change this path
 GOCOMPILER='/usr/local/go/bin/go'
 
+FIRST_COMPILE_DONE=false
 LAST_CHANGES_SIZE=0
 while true
 do
     CHANGES=$($GIT diff)
     CHANGES_OUTPUT_LENGTH=$(printf "%s" "$CHANGES" | wc -c)
-    if (($CHANGES_OUTPUT_LENGTH == $LAST_CHANGES_SIZE));
+    if (($CHANGES_OUTPUT_LENGTH == $LAST_CHANGES_SIZE && $FIRST_COMPILE_DONE == true));
     then
         continue
     fi
 
     LAST_CHANGES_SIZE=$CHANGES_OUTPUT_LENGTH
 
-    if (($CHANGES_OUTPUT_LENGTH > 0));
+    if ((!$FIRST_COMPILE_DONE)) || (($CHANGES_OUTPUT_LENGTH > 0));
     then
+        if ((!$FIRST_COMPILE_DONE));
+        then
+            FIRST_COMPILE_DONE=true
+        fi
+
         echo "Recompiled!"
         $($GOCOMPILER run $ENTRYPOINT) &
     fi
