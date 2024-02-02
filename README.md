@@ -6,3 +6,6 @@ be called automatically, so you will don't have to be recompiling the project ma
 
 # Test
 - Clone this repo, call `bash hotreload.sh` and change something on `main.go` file.
+
+# TODO
+- Recompiling has to kill the old running GO process before start a new one
