@@ -22,21 +22,19 @@ while true
 do
     CHANGES=$($GIT diff)
     CHANGES_OUTPUT_LENGTH=$(printf "%s" "$CHANGES" | wc -c)
-    if (($CHANGES_OUTPUT_LENGTH == $LAST_CHANGES_SIZE && $FIRST_COMPILE_DONE == true));
+    if (($CHANGES_OUTPUT_LENGTH == $LAST_CHANGES_SIZE)) && $FIRST_COMPILE_DONE;
     then
         continue
     fi
 
     LAST_CHANGES_SIZE=$CHANGES_OUTPUT_LENGTH
 
-    if ((!$FIRST_COMPILE_DONE)) || (($CHANGES_OUTPUT_LENGTH > 0));
-    then
-        if ((!$FIRST_COMPILE_DONE));
-        then
+    if (( !$FIRST_COMPILE_DONE )) || (($CHANGES_OUTPUT_LENGTH > 0)); then
+        if (( !$FIRST_COMPILE_DONE )); then
             FIRST_COMPILE_DONE=true
         fi
 
         echo "Recompiled!"
-        $($GOCOMPILER run $ENTRYPOINT) &
+        $GOCOMPILER run $ENTRYPOINT_SERVER &
     fi
 done
